@@ -26,11 +26,22 @@ from wsgiref.util import FileWrapper
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def sign(request):
-   
+
+    nik = request.POST['nik']
+    passphrase = request.POST['passphrase']
+    print("nik",nik)
+    print("passphrase",passphrase)
+    if nik == "11122233" and passphrase == "testing":
+        pass
+    else:
+        return Response({'msg': 'NIK atau PASSPHRASE anda salah'}, status=status.HTTP_400_BAD_REQUEST)
+
     if request.FILES:
         if 'file' in request.FILES:
             file = request.FILES['file']
             reason = request.POST['reason']
+            reason = request.POST['reason']
+            
             print(file)
             model_created = SignModel.objects.create(file=file)
             sign_proceess(model_created,reason)
