@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 import subprocess
 from .models import SignModel
 from pyhanko.sign import signers
@@ -21,6 +21,7 @@ def index(request):
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import (api_view, permission_classes)
+from django.http import FileResponse
 from wsgiref.util import FileWrapper
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
@@ -36,6 +37,19 @@ def sign(request):
             short_report = open(model_created.file.path, 'rb')
             response = HttpResponse(FileWrapper(short_report), content_type='application/pdf')
             # return  Response({"id":model_created.id, "model_created_path":model_created.file.path})
+            # return Response(response)
+            short_report = open(model_created.file.path, 'rb')
+            response = HttpResponse(FileWrapper(short_report), content_type='application/pdf')
+
+            # img = open(model_created.file.path, 'rb')
+
+            # response = JsonResponse(img)
+            # return response
+            # return FileResponse(open(model_created.file.path, 'rb'), content_type='application/pdf')
+            # response = HttpResponse(model_created.file.read())
+            # response['Content-Disposition'] = 'filename=some_file.pdf'
+            # return response
+
             return response
         else:
             return Response({'detail':'invalid key!'}, status=status.HTTP_400_BAD_REQUEST)
