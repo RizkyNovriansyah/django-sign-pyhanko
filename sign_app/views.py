@@ -43,9 +43,9 @@ def sign(request):
     return Response({'detail': 'file is missing!'}, status=status.HTTP_400_BAD_REQUEST)
 
 def sign_proceess(obj,reason):
-    print(str(datetime.datetime.now()))
+    time_stamp = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     with open(obj.file.path, 'rb+') as doc:
         w = IncrementalPdfFileWriter(doc)
-        append_signature_field(w, SigFieldSpec(sig_field_name="Coofis Sign:"+reason+" "))
+        append_signature_field(w, SigFieldSpec(sig_field_name="Coofis Sign:"+reason+" ("+time_stamp+")"))
         w.write_in_place()
     return 
